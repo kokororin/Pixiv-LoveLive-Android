@@ -1,0 +1,52 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:scrollbarSize="20dp"
+            android:scrollbarStyle="outsideOverlay">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/help_q_tv"
+            android:text="@string/about_title_1"/>
+
+        <TextView
+            style="@style/help_a_tv"
+            android:autoLink="phone"
+            android:text="@string/about_text_1"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eeeeee"/>
+
+        <TextView
+            style="@style/help_q_tv"
+            android:text="@string/about_title_2"/>
+
+        <TextView
+            style="@style/help_a_tv"
+            android:text="@string/about_text_2"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eeeeee"/>
+
+        <TextView
+            style="@style/help_q_tv"
+            android:gravity="center"
+            android:text="@string/app_version"/>
+
+
+    </LinearLayout>
+
+
+</ScrollView>

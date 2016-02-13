@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LoveLive!</string>
+    <string name="action_about">可爱的「关于」页面</string>
+    <string name="about_title_1">这是什么</string>
+    <string name="about_text_1">此应用是为了便于查看Pixiv插画网站中的LoveLive!相关而制作的.</string>
+    <string name="about_title_2">感谢</string>
+    <string name="about_text_2">感谢threezj,这款应用是在福利满满的基础上修改的.</string>
+    <string name="app_version">LoveLive! Beta 1</string>
+</resources>
