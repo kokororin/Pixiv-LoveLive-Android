@@ -19,7 +19,7 @@ public class HttpUtil {
         Response.Listener<String> requestListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                httpUtilCallBack.onFinsh(response);
+                httpUtilCallBack.onFinish(response);
             }
         };
         Response.ErrorListener requestErrorListener = new Response.ErrorListener() {
@@ -36,7 +36,7 @@ public class HttpUtil {
 
 
     public interface HttpUtilCallBack {
-        void onFinsh(String response);
+        void onFinish(String response);
 
         void onError(Exception e);
     }

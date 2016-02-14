@@ -31,9 +31,9 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 
-public class PageFragment extends Fragment {
+public class PageFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private StaggeredGridLayoutManager gaggeredGridLayoutManager;
+    private StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     private ImageRecyclerViewAdapter imageRecyclerViewAdapter;
     private RecyclerView recyclerView;
@@ -49,13 +49,13 @@ public class PageFragment extends Fragment {
     private final int ONCE_LOAD_NUMBER = 20;
     private Realm realm;
     private boolean isFirstRequest = true;
-    private static final String TPEY_ARGS_KEY = "TYPE_KEY";
+    private static final String TYPE_ARGS_KEY = "TYPE_KEY";
     private int type = 0;
 
 
     public static PageFragment newInstance(int type) {
         Bundle args = new Bundle();
-        args.putInt(TPEY_ARGS_KEY, type);
+        args.putInt(TYPE_ARGS_KEY, type);
         PageFragment fragment = new PageFragment();
         fragment.setArguments(args);
         return fragment;
@@ -64,7 +64,7 @@ public class PageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        type = getArguments().getInt(TPEY_ARGS_KEY);
+        type = getArguments().getInt(TYPE_ARGS_KEY);
         realm = Realm.getInstance(getActivity());
     }
 
@@ -73,6 +73,7 @@ public class PageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_page, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.content);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresher);
+        swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary);
         mPage = SharedPreferencesUtil.getCurrentPage(getActivity(), type);
         return view;
@@ -95,24 +96,17 @@ public class PageFragment extends Fragment {
 
         } else recyclerView.getAdapter().notifyDataSetChanged();
 
-        recyclerView.addOnScrollListener(getOnBottomListener(gaggeredGridLayoutManager));
+        recyclerView.addOnScrollListener(getOnBottomListener(staggeredGridLayoutManager));
     }
 
-    private void init() {
 
+
+    private void init() {
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.d("test", "onRefresh");
-                isFirstRequest = true;
-                mPage = 1;
-
-                realm.beginTransaction();
-                realm.where(Image.class)
-                        .equalTo("type", type).findAll().clear();
-                realm.commitTransaction();
-                preHttpRequest();
+                forceRefresh();
             }
         });
 
@@ -121,8 +115,8 @@ public class PageFragment extends Fragment {
                 .equalTo("type", type).findAll();
 
         recyclerView.setHasFixedSize(true);
-        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
-        recyclerView.setLayoutManager(gaggeredGridLayoutManager);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
         imageRecyclerViewAdapter = new ImageRecyclerViewAdapter(getActivity(), images) {
             @Override
             protected void onItemClick(View v, int position) {
@@ -144,12 +138,22 @@ public class PageFragment extends Fragment {
         getImagesDataFromHttp(url, httpUtilCallBack);
     }
 
+    private void forceRefresh(){
+        isFirstRequest = true;
+        mPage = 1;
+        realm.beginTransaction();
+        realm.where(Image.class)
+                .equalTo("type", type).findAll().clear();
+        realm.commitTransaction();
+        preHttpRequest();
+    }
+
     @NonNull
     private HttpUtil.HttpUtilCallBack getHttpUtilCallBack() {
 
         return new HttpUtil.HttpUtilCallBack() {
             @Override
-            public void onFinsh(String response) {
+            public void onFinish(String response) {
                 httpResponse = response;
                 isFirstRequest = false;
                 handleResponse();
@@ -226,6 +230,12 @@ public class PageFragment extends Fragment {
         };
     }
 
+    @Override
+    public void onRefresh() {
+        Log.d("test", "NicoNicoNi");
+        swipeRefreshLayout.setRefreshing(true);
+        forceRefresh();
+    }
 
     @Override
     public void onDestroy() {

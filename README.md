@@ -1,4 +1,5 @@
-# Pixiv LoveLive Viewer For Android
+Pixiv LoveLive Viewer For Android [![Build Status](https://api.travis-ci.org/kokororin/Pixiv-LoveLive-Android.svg)](https://travis-ci.org/kokororin/Pixiv-LoveLive-Android)
+=====
 
 ## 简介
 这是一款从Pixiv插画网站搜索LoveLive!相关作品的Android应用

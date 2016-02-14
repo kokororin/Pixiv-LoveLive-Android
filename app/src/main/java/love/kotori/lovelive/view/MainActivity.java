@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -16,6 +17,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import com.astuetz.PagerSlidingTabStrip;
 
 import love.kotori.lovelive.domain.Api;
@@ -23,7 +27,6 @@ import love.kotori.lovelive.fragment.PageFragment;
 import love.kotori.lovelive.R;
 
 public class MainActivity extends AppCompatActivity {
-
 
     private ViewPager mainViewPager;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         mainViewPager = (ViewPager) findViewById(R.id.main_viewPager);
         //mainViewPager.setOffscreenPageLimit(1);
         mainViewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager()));
@@ -89,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_about) {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -100,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
+    }
+
+    @OnClick(R.id.fab)
+    public void fabOnClick() {
+        PagerAdapter adapter = mainViewPager.getAdapter();
+        PageFragment fragment = (PageFragment) adapter.instantiateItem(mainViewPager, mainViewPager.getCurrentItem());
+        fragment.onRefresh();
     }
 
     @Override
@@ -115,6 +124,12 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(KeyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
     }
 
 
