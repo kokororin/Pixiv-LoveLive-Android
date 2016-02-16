@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 
 import java.io.File;
 
+import butterknife.Bind;
 import love.kotori.lovelive.fragment.ImageViewerFragment;
 import love.kotori.lovelive.R;
 import love.kotori.lovelive.model.Image;
@@ -34,6 +36,8 @@ public class ImageViewerActivity extends AppCompatActivity {
     private int type;
     private String url;
     private String title;
+    @Bind(R.id.coordinatorLayout)
+    CoordinatorLayout mContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,26 +68,33 @@ public class ImageViewerActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_save:
-                File direct = new File(Environment.getExternalStorageDirectory()
-                        + "/love.kotori.lovelive");
 
-                if (!direct.exists()) {
-                    direct.mkdirs();
+                try {
+                    File direct = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                            + "/love.kotori.lovelive");
+
+                    if (!direct.exists()) {
+                        direct.mkdirs();
+                    }
+
+                    DownloadManager mgr = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
+
+                    Uri downloadUri = Uri.parse(url);
+                    DownloadManager.Request request = new DownloadManager.Request(downloadUri);
+
+                    request.setAllowedNetworkTypes(
+                            DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
+                            .setAllowedOverRoaming(false).setTitle(title)
+                            .setDescription("Something useful. No, really.")
+                            .setDestinationInExternalPublicDir("/love.kotori.lovelive", title + ".jpg");
+                    mgr.enqueue(request);
+                    SnackbarUtil.showLong(mContainer, "插画已保存至存储卡", "red");
+                    return true;
+                } catch (IllegalStateException e) {
+                    SnackbarUtil.showShort(this.mViewPager, "你并没有存储卡", "red");
+                    return true;
                 }
 
-                DownloadManager mgr = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
-
-                Uri downloadUri = Uri.parse(url);
-                DownloadManager.Request request = new DownloadManager.Request(downloadUri);
-
-                request.setAllowedNetworkTypes(
-                        DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
-                        .setAllowedOverRoaming(false).setTitle(title)
-                        .setDescription("Something useful. No, really.")
-                        .setDestinationInExternalPublicDir("/love.kotori.lovelive", title + ".jpg");
-                mgr.enqueue(request);
-                SnackbarUtil.showLong(this.mViewPager, "插画已保存至存储卡", "red");
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -104,8 +115,6 @@ public class ImageViewerActivity extends AppCompatActivity {
         finish();
         return null;
     }
-
-
 
 
     @Override

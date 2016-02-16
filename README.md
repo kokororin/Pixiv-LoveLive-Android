@@ -5,10 +5,18 @@ Pixiv LoveLive Viewer For Android [![Build Status](https://api.travis-ci.org/kok
 这是一款从Pixiv插画网站搜索LoveLive!相关作品的Android应用
 
 ## LICENSE
-本应用修改自[threezj](https://github.com/threezj)的[福利满满](https://github.com/threezj/FuLiApp)，再次表示感谢，原项目遵循The MIT License (MIT)。
+The MIT License (MIT)。
 
-## 应用截图
-![1.jpg](https://kotori.love/usr/uploads/2016/02/1070665742.jpg)
-![2.png](https://kotori.love/usr/uploads/2016/02/484416017.png)
-![3.png](https://kotori.love/usr/uploads/2016/02/3453674027.png)
-![4.png](https://kotori.love/usr/uploads/2016/02/2311639059.png)
+## TODO
+- [] MD化
+- [X] 根据小姐姐颜色自动变色状态栏
+- [X] 悬浮刷新按钮
+- [X] 显示插画标题
+- [X] 保存到存储卡
+- [] 自定义搜索
+
+## 参考的开源项目
+* [threezj/FuLiApp](https://github.com/threezj/FuLiApp)
+* [drakeet/Meizhi](https://github.com/drakeet/Meizhi)
+* [tangqi92/BuildingBlocks](https://github.com/tangqi92/BuildingBlocks)
+

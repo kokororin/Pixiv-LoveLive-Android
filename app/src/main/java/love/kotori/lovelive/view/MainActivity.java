@@ -2,7 +2,6 @@ package love.kotori.lovelive.view;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -22,8 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -39,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mainViewPager;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private long exitTime = 0;
+    @Bind(R.id.coordinatorLayout)
+    CoordinatorLayout mContainer;
 
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onKeyDown(int KeyCode, KeyEvent event) {
         if (KeyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (System.currentTimeMillis() - exitTime > 2000) {
-                SnackbarUtil.showLong(mainViewPager, getResources().getString(R.string.confirm_exit), "red");
+                SnackbarUtil.showLong(mContainer, getResources().getString(R.string.confirm_exit), "red");
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();
