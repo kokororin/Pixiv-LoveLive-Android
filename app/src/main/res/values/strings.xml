@@ -6,4 +6,8 @@
     <string name="about_title_2">感谢</string>
     <string name="about_text_2">感谢threezj,这款应用是在福利满满的基础上修改的.</string>
     <string name="app_version">LoveLive! Beta 1</string>
+    <string name="image_viewer_label">查看插画</string>
+    <string name="confirm_exit">再按一次退出</string>
+    <string name="load_error">加载失败!</string>
+    <string name="action_share">分享</string>
 </resources>

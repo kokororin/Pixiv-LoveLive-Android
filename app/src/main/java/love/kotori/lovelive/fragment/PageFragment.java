@@ -4,6 +4,7 @@ package love.kotori.lovelive.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import butterknife.Bind;
 import love.kotori.lovelive.domain.Api;
 import love.kotori.lovelive.R;
 import love.kotori.lovelive.util.HttpUtil;
 import love.kotori.lovelive.util.ResponseHandleUtil;
 import love.kotori.lovelive.util.SharedPreferencesUtil;
+import love.kotori.lovelive.util.SnackbarUtil;
 import love.kotori.lovelive.view.ImageViewerActivity;
 import love.kotori.lovelive.adapter.ImageRecyclerViewAdapter;
 import love.kotori.lovelive.model.Image;
@@ -51,6 +53,8 @@ public class PageFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private boolean isFirstRequest = true;
     private static final String TYPE_ARGS_KEY = "TYPE_KEY";
     private int type = 0;
+    @Bind(R.id.coordinatorLayout)
+    CoordinatorLayout mContainer;
 
 
     public static PageFragment newInstance(int type) {
@@ -100,7 +104,6 @@ public class PageFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
 
-
     private void init() {
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -138,7 +141,7 @@ public class PageFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         getImagesDataFromHttp(url, httpUtilCallBack);
     }
 
-    private void forceRefresh(){
+    private void forceRefresh() {
         isFirstRequest = true;
         mPage = 1;
         realm.beginTransaction();
@@ -162,7 +165,7 @@ public class PageFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onError(Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(), "加载失败！", Toast.LENGTH_SHORT).show();
+                SnackbarUtil.showShort(mContainer, getResources().getString(R.string.load_error), "red");
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -191,7 +194,7 @@ public class PageFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getActivity(), "加载失败，请再次尝试", Toast.LENGTH_SHORT).show();
+                            SnackbarUtil.showShort(mContainer, getResources().getString(R.string.load_error), "red");
                         }
                     });
                 }

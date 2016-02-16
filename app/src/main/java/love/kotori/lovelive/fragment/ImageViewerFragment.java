@@ -3,6 +3,7 @@ package love.kotori.lovelive.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +13,22 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+
 import love.kotori.lovelive.R;
+import love.kotori.lovelive.view.ImageViewerActivity;
 import love.kotori.lovelive.widget.TouchImageView;
 
 public class ImageViewerFragment extends Fragment implements RequestListener<String, GlideDrawable> {
 
     private String url;
-    private TouchImageView image ;
+    private String title;
+    private TouchImageView image;
 
-    public static ImageViewerFragment newInstance(String url) {
+    public static ImageViewerFragment newInstance(String url, String title) {
         Bundle bundle = new Bundle();
         bundle.putString("url", url);
+        bundle.putString("title", title);
+
 
         ImageViewerFragment fragment = new ImageViewerFragment();
         fragment.setArguments(bundle);
@@ -31,10 +37,20 @@ public class ImageViewerFragment extends Fragment implements RequestListener<Str
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            ((ImageViewerActivity) getActivity()).getSupportActionBar().setTitle(title);
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         url = getArguments().getString("url");
+        title = getArguments().getString("title");
+        Log.d("title", title + "," + url);
+
     }
 
     @Override
@@ -43,6 +59,7 @@ public class ImageViewerFragment extends Fragment implements RequestListener<Str
         image = (TouchImageView) v.findViewById(R.id.picture);
         return v;
     }
+
 
     @Override
     public void onResume() {

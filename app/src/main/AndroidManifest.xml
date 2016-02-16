@@ -27,7 +27,14 @@
         </activity>
         <activity android:name=".view.MainActivity">
         </activity>
-        <activity android:name=".view.ImageViewerActivity"></activity>
+        <activity
+            android:name=".view.ImageViewerActivity"
+            android:label="@string/image_viewer_label"
+            android:parentActivityName=".view.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.MainActivity"/>
+        </activity>
         <activity android:name=".view.AboutActivity"></activity>
 
     </application>

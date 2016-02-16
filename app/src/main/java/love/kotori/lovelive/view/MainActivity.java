@@ -2,20 +2,27 @@ package love.kotori.lovelive.view;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,6 +32,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import love.kotori.lovelive.domain.Api;
 import love.kotori.lovelive.fragment.PageFragment;
 import love.kotori.lovelive.R;
+import love.kotori.lovelive.util.SnackbarUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +57,23 @@ public class MainActivity extends AppCompatActivity {
         pagerSlidingTabStrip.setIndicatorColor(R.color.blue_500);
         //指示条高度
         pagerSlidingTabStrip.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
+
+
+        mainViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int position) {
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(Api.actionBarColors[position])));
+                Window window = getWindow();
+                // clear FLAG_TRANSLUCENT_STATUS flag:
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                // finally change the color
+                window.setStatusBarColor(Color.parseColor(Api.statusBarColors[position]));
+                getSupportActionBar().setTitle(Html.fromHtml("<font color=\"" + Api.titleColors[position] + "\">" + getString(R.string.app_name) + "</font>"));
+            }
+        });
     }
 
 
@@ -115,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onKeyDown(int KeyCode, KeyEvent event) {
         if (KeyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (System.currentTimeMillis() - exitTime > 2000) {
-                Toast.makeText(getApplicationContext(), "再按一次退出", Toast.LENGTH_SHORT).show();
+                SnackbarUtil.showLong(mainViewPager, getResources().getString(R.string.confirm_exit), "red");
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();

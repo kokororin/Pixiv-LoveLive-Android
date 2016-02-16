@@ -22,9 +22,10 @@ public class ResponseHandleUtil {
         JSONObject jsonObject = new JSONObject(response);
         JSONArray jsonArray = jsonObject.getJSONArray("response");
 
-            for (int i = currentImagePosition; currentImagePosition < jsonArray.length() && i < currentImagePosition + onceLoad; i++) {
+        for (int i = currentImagePosition; currentImagePosition < jsonArray.length() && i < currentImagePosition + onceLoad; i++) {
             jsonObject = jsonArray.getJSONObject(i);
             String url = jsonObject.getJSONObject("image_urls").getString("px_480mw");
+            String title = jsonObject.getString("title");
 
             Image image = new Image(url);
             //            Bitmap bitmap = Glide.with(context).load(image.getUrl()).asBitmap().thumbnail(0.1f)
@@ -33,6 +34,7 @@ public class ResponseHandleUtil {
             //            image.setWidth(bitmap.getWidth());
             //            image.setHeight(bitmap.getHeight());
             image.setType(type);
+            image.setTitle(title);
             realm.copyToRealm(image);
 
         }

@@ -5,14 +5,14 @@ import io.realm.RealmObject;
 public class Image extends RealmObject {
 
     private String url;
-
+    private String title;
     private int type;
 
     public Image() {
     }
 
     public Image(String url) {
-        this.url = url;
+        this.setUrl(url);
     }
 
     public String getUrl() {
@@ -21,6 +21,14 @@ public class Image extends RealmObject {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getType() {
