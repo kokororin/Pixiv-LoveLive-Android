@@ -8,12 +8,12 @@ Pixiv LoveLive Viewer For Android [![Build Status](https://api.travis-ci.org/kok
 The MIT License (MIT)。
 
 ## TODO
-- [] MD化
+- [ ] MD化
 - [X] 根据小姐姐颜色自动变色状态栏
 - [X] 悬浮刷新按钮
 - [X] 显示插画标题
 - [X] 保存到存储卡
-- [] 自定义搜索
+- [ ] 自定义搜索
 
 ## 参考的开源项目
 * [threezj/FuLiApp](https://github.com/threezj/FuLiApp)
